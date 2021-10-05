@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "checkount-bad9e": {
+      "hosting": {
+        "app": [
+          "checkount-bad9e"
+        ]
+      }
+    }
+  }
+}

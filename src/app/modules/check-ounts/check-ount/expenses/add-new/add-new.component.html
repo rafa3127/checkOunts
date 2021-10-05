@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Nuevo Gasto en {{checkOunts.selected.name}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="./"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-title class="content_title">Crear un Nuevo CheckOunt</ion-title>    
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <ion-card>   
+      <ion-item class="form_item">
+        <ion-select formControlName="userID" placeholder="Select One">
+          <ion-select-option disabled value="">Selecciona a la persona que pagará</ion-select-option>
+          <ion-select-option *ngFor="let user of checkOunts.selected.users " value="{{user.id}}">{{user.name}} ({{user.email}})</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="form_errs" *ngIf="form.controls['userID'].invalid && form.controls['userID'].dirty">
+        <ion-label class="form_err" *ngIf="form.controls['userID'].errors.required">Debe seleccionar a la persona que pagará</ion-label>
+      </div>
+      
+      <ion-item class="form_item">
+        <ion-label position="floating">Concepto</ion-label>
+        <ion-input formControlName="concept" type="text"></ion-input>
+      </ion-item>
+      <div class="form_errs"  *ngIf="form.controls['concept'].invalid && form.controls['concept'].dirty">
+        <ion-label class="form_err" *ngIf="form.controls['concept'].errors.pattern">El concepto no puede tener caracteres especiales</ion-label>
+        <ion-label class="form_err" *ngIf="form.controls['concept'].errors.maxlength">El concepto no puede tener más de 50 caracteres</ion-label>
+      </div>
+
+      <ion-item class="form_item">
+        <ion-label position="floating">Monto Total</ion-label>
+        <ion-input formControlName="amount" type="number" (change)="calculated()" [value]="total"></ion-input>
+      </ion-item>
+      <div class="form_errs"  *ngIf="form.controls['amount'].invalid && form.controls['amount'].dirty">
+        <ion-label class="form_err" *ngIf="form.controls['amount'].errors.required">Debe ingresar un monto mayor a 0</ion-label>
+        <ion-label class="form_err" *ngIf="form.controls['amount'].errors.negativeAmount">Debe ingresar un monto mayor a 0</ion-label>
+      </div>
+
+    </ion-card>
+  </form>
+
+  <ion-title class="content_title">Distribución del Gasto</ion-title>
+
+  <ion-card>
+    <div class="restart-button">
+      <ion-button color="secondary" (click)="restartBalance()">
+        <ion-icon slot="start" name="refresh-outline"></ion-icon>
+        Restablecer saldos
+      </ion-button>
+    </div>
+    <div *ngFor = "let user of arrayControls">
+      <form [formGroup]="user">
+        <ion-label class="user-name-form">{{user.value.name}} ({{user.value.email}})</ion-label>
+        <ion-item class="form_item">
+          <ion-label position="floating">Monto</ion-label>
+          <ion-input formControlName="amount" type="number" (change)="calculated(user.controls['id'].value)" [value]="user.controls['amount'].value "></ion-input>
+        </ion-item>
+        <div class="form_errs"  *ngIf="user.controls['amount'].invalid && user.controls['amount'].dirty">
+          <ion-label class="form_err" *ngIf="user.controls['amount'].errors.required">Debe ingresar un monto mayor o igual a 0</ion-label>
+          <ion-label class="form_err" *ngIf="user.controls['amount'].errors.negativeAmount">Debe ingresar un monto mayor o igual a 0</ion-label>
+        </div>
+      </form>
+    </div>
+  </ion-card>
+  <div class="submit-button">
+    <ion-button color="primary" (click)="onSubmit()">
+      Crear Gasto
+    </ion-button>
+  </div>
+
+</ion-content>

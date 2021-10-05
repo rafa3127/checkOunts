@@ -1,0 +1,24 @@
+.form-container{
+    width: 100%;
+    height: 100vh;
+    padding: 30% 0;
+    justify-content: center;
+}
+
+.button{
+    height: 40px;
+    
+    ion-icon{
+        margin: 5px;
+        color: var(--ion-color-light);
+    }
+    width: 100%;
+}
+.button-text{
+    color: var(--ion-color-light);
+}
+
+a{
+    margin: 20px auto;
+    font-size: 15px;
+}

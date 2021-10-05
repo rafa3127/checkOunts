@@ -1,0 +1,30 @@
+<ion-content>
+  <ion-item>
+    <div class="form-container">
+      <ion-img src="assets/CheckOunt.png"></ion-img>
+      <div class="form">
+        <form [formGroup]="form" (ngSubmit)="signupEmail()">
+          <ion-item>
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input required formControlName="name" type="text"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">E-Mail</ion-label>
+            <ion-input required formControlName="email" type="text"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input required formControlName="password" type="password"></ion-input>
+          </ion-item>
+          <ion-button class="button email-button" type="submit" color="primary" [disabled]="form.invalid">
+            <ion-icon name="mail-outline"></ion-icon> 
+              <span class="button-text">Registrar</span> 
+          </ion-button>
+        </form>
+      </div>
+
+      <ion-row>
+        <a routerLink="/auth/signin">¿Ya tienes Cuenta? <strong>Iniciar Sesión</strong></a>
+      </ion-row>
+    </div>
+  </ion-item>

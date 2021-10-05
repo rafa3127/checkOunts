@@ -1,0 +1,32 @@
+<ion-content>
+  <ion-item>
+    <div class="form-container">
+      <ion-img src="assets/CheckOunt.png"></ion-img>
+      <div class="form">
+        <form [formGroup]="form" (ngSubmit)="loginEmail()">
+          <ion-item>
+            <ion-label position="floating">E-Mail</ion-label>
+            <ion-input required formControlName="email" type="text"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input required formControlName="password" type="password"></ion-input>
+          </ion-item>
+          <ion-button class="button email-button" type="submit" color="secondary" [disabled]="form.invalid">
+            <ion-icon name="mail-outline"></ion-icon> 
+              <span class="button-text">Iniciar Sesión con Email</span> 
+          </ion-button>
+        </form>
+      </div>
+      <ion-row>
+        <ion-button class="button google-button" (click)="loginGoogle()" color="primary">
+          <ion-icon slot="start" name="logo-google" color="light"></ion-icon>
+          Iniciar Sesión con Google
+        </ion-button>
+      </ion-row>
+      <ion-row>
+        <a routerLink="/auth/signup">¿No tienes Cuenta? <strong>Crear</strong></a>
+      </ion-row>
+    </div>
+  </ion-item>
+</ion-content>
