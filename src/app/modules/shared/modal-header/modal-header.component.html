@@ -1,0 +1,9 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{title}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button *ngIf="!emergentModal" [defaultHref]="defaultHRef" text=""></ion-back-button>
+      <ion-back-button *ngIf="emergentModal" (click) = "onClick($event)" defaultHref="" text=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

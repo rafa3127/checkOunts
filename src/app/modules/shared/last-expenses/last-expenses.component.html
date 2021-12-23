@@ -1,0 +1,39 @@
+<ion-grid fixed>
+  <ion-row>
+    <ion-col size="12">
+      <h3 class="title">
+        Últimos Gastos
+      </h3>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="expenses.length == 0">
+    <ion-col size="12">
+      <ion-card class="empty-array">
+        <ion-label>
+          Hasta el momento, no has registrado ningún gasto.
+        </ion-label>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="expenses.length > 0">
+    <ion-col size="12">
+      <ion-card>
+        <ion-grid>
+          <!-- <ion-row class="table-header">
+            <ion-col size="4">CheckOunt</ion-col>
+            <ion-col size="6">Concepto</ion-col>
+            <ion-col size="2">Monto</ion-col>
+          </ion-row> -->
+          <ion-row class="table-item" *ngFor = "let exp of expenses">
+            <ion-col size="4">{{exp.coName}}</ion-col>
+            <ion-col size="5">{{exp.concept}}</ion-col>
+            <ion-col size="3" class="amount">{{exp.amount | currency: "USD"}}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  
+</ion-grid>

@@ -8,7 +8,7 @@ import { CheckountsService } from 'src/app/core/services/checkounts.service';
   styleUrls: ['./expense.component.scss'],
 })
 export class ExpenseComponent implements OnInit {
-  payers: Array<any>
+  expense: any
   constructor(
     private modalCtrl: ModalController,
     public params: NavParams,
@@ -16,7 +16,7 @@ export class ExpenseComponent implements OnInit {
   ) { }
 
   ngOnInit(){
-    this.payers = this.params.get('payers')
+    this.expense = this.params.data
   }
 
   dismiss() {
@@ -27,5 +27,6 @@ export class ExpenseComponent implements OnInit {
   payFor(){
     return this.params.get("payers").filter(payer => payer.userID == this.params.get("userID"))[0].userName
   }
+
 
 }

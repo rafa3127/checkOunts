@@ -1,76 +1,79 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Nuevo Gasto en {{checkOunts.selected.name}}</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="./"></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-modal-header (backButtonClicked)="headerBackButton()" [emergentModal]="true" [title]="'Nuevo Gasto en ' + checkOunt.payload.data().name"></app-modal-header>
 
 
 <ion-content>
-  <ion-title class="content_title">Crear un Nuevo CheckOunt</ion-title>    
-
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <ion-card>   
-      <ion-item class="form_item">
-        <ion-select formControlName="userID" placeholder="Select One">
-          <ion-select-option disabled value="">Selecciona a la persona que pagará</ion-select-option>
-          <ion-select-option *ngFor="let user of checkOunts.selected.users " value="{{user.id}}">{{user.name}} ({{user.email}})</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <div class="form_errs" *ngIf="form.controls['userID'].invalid && form.controls['userID'].dirty">
-        <ion-label class="form_err" *ngIf="form.controls['userID'].errors.required">Debe seleccionar a la persona que pagará</ion-label>
-      </div>
+  <ion-grid fixed>
+    <app-form-alert [msg]="errorMSG"></app-form-alert>
+    <ion-row>
+      <ion-col size="12">   
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <ion-card>   
+            <ion-item class="form_item">
+              <ion-select formControlName="userEmail" placeholder="Select One">
+                <ion-select-option disabled value="">Selecciona a la persona que pagará</ion-select-option>
+                <ion-select-option *ngFor="let user of checkOunt.payload.data().users " value="{{user.email}}">{{user.name}} ({{user.email}})</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div *ngIf="form.controls['userEmail'].invalid && (form.controls['userEmail'].dirty || form.controls['userEmail'].touched)">
+              <app-form-alert [classItem]="true" *ngIf="form.controls['userEmail'].errors?.['required']" msg="Debe ingresar un Usuario"></app-form-alert>
+            </div>
+            
+            <ion-item class="form_item">
+              <ion-label position="floating">Concepto</ion-label>
+              <ion-input formControlName="concept" type="text"></ion-input>
+            </ion-item>
+            <div *ngIf="form.controls['concept'].invalid && (form.controls['concept'].dirty || form.controls['concept'].touched)">
+              <app-form-alert [classItem]="true" *ngIf="form.controls['concept'].errors?.['pattern']" msg="El concepto no puede tener caracteres especiales"></app-form-alert>
+              <app-form-alert [classItem]="true" *ngIf="form.controls['concept'].errors?.['maxlength']" msg="El concepto no puede tener más de 50 caracteres"></app-form-alert>
+            </div>
       
-      <ion-item class="form_item">
-        <ion-label position="floating">Concepto</ion-label>
-        <ion-input formControlName="concept" type="text"></ion-input>
-      </ion-item>
-      <div class="form_errs"  *ngIf="form.controls['concept'].invalid && form.controls['concept'].dirty">
-        <ion-label class="form_err" *ngIf="form.controls['concept'].errors.pattern">El concepto no puede tener caracteres especiales</ion-label>
-        <ion-label class="form_err" *ngIf="form.controls['concept'].errors.maxlength">El concepto no puede tener más de 50 caracteres</ion-label>
-      </div>
-
-      <ion-item class="form_item">
-        <ion-label position="floating">Monto Total</ion-label>
-        <ion-input formControlName="amount" type="number" (change)="calculated()" [value]="total"></ion-input>
-      </ion-item>
-      <div class="form_errs"  *ngIf="form.controls['amount'].invalid && form.controls['amount'].dirty">
-        <ion-label class="form_err" *ngIf="form.controls['amount'].errors.required">Debe ingresar un monto mayor a 0</ion-label>
-        <ion-label class="form_err" *ngIf="form.controls['amount'].errors.negativeAmount">Debe ingresar un monto mayor a 0</ion-label>
-      </div>
-
-    </ion-card>
-  </form>
-
-  <ion-title class="content_title">Distribución del Gasto</ion-title>
-
-  <ion-card>
-    <div class="restart-button">
-      <ion-button color="secondary" (click)="restartBalance()">
-        <ion-icon slot="start" name="refresh-outline"></ion-icon>
-        Restablecer saldos
-      </ion-button>
-    </div>
-    <div *ngFor = "let user of arrayControls">
-      <form [formGroup]="user">
-        <ion-label class="user-name-form">{{user.value.name}} ({{user.value.email}})</ion-label>
-        <ion-item class="form_item">
-          <ion-label position="floating">Monto</ion-label>
-          <ion-input formControlName="amount" type="number" (change)="calculated(user.controls['id'].value)" [value]="user.controls['amount'].value "></ion-input>
-        </ion-item>
-        <div class="form_errs"  *ngIf="user.controls['amount'].invalid && user.controls['amount'].dirty">
-          <ion-label class="form_err" *ngIf="user.controls['amount'].errors.required">Debe ingresar un monto mayor o igual a 0</ion-label>
-          <ion-label class="form_err" *ngIf="user.controls['amount'].errors.negativeAmount">Debe ingresar un monto mayor o igual a 0</ion-label>
+            <ion-item class="form_item">
+              <ion-label position="floating">Monto Total</ion-label>
+              <ion-input formControlName="amount" type="number" (change)="calculated()" [value]="total"></ion-input>
+            </ion-item>
+            <div *ngIf="form.controls['amount'].invalid && (form.controls['amount'].dirty || form.controls['amount'].touched)">
+              <app-form-alert [classItem]="true" *ngIf="form.controls['amount'].errors?.['required']" msg="Debe ingresar un monto mayor a 0"></app-form-alert>
+              <app-form-alert [classItem]="true" *ngIf="form.controls['amount'].errors?.['negativeAmount']" msg="Debe ingresar un monto mayor a 0"></app-form-alert>
+            </div>
+      
+          </ion-card>
+        </form>
+      </ion-col>
+    </ion-row>
+    <app-section-title title="Distribución de gastos"></app-section-title>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <div class="restart-button">
+            <ion-button color="secondary" (click)="restartBalance()">
+              <ion-icon slot="start" name="refresh-outline"></ion-icon>
+              Restablecer saldos
+            </ion-button>
+          </div>
+          <div *ngFor = "let user of arrayControls">
+            <form [formGroup]="user">
+              <ion-label class="user-name-form">{{user.value.name}}</ion-label>
+              <ion-item class="form_item">
+                <ion-label position="floating">Monto</ion-label>
+                <ion-input formControlName="amount" type="number" (change)="calculated(user.controls['email'].value)" [value]="user.controls['amount'].value "></ion-input>
+              </ion-item>
+              <div *ngIf="user.controls['amount'].invalid && (user.controls['amount'].dirty || user.controls['amount'].touched)">
+                <app-form-alert [classItem]="true" *ngIf="user.controls['amount'].errors?.['required']" msg="Debe ingresar un monto mayor a 0"></app-form-alert>
+                <app-form-alert [classItem]="true" *ngIf="user.controls['amount'].errors?.['negativeAmount']" msg="Debe ingresar un monto mayor a 0"></app-form-alert>
+              </div>
+            </form>
+          </div>
+        </ion-card>
+        <div class="submit-button">
+          <ion-button color="primary" (click)="onSubmit()" [disabled]="loading || form.invalid || formUsers.invalid">
+            <span *ngIf = "!loading">
+              Crear Gasto
+            </span>
+            <ion-spinner *ngIf="loading" name="circular"></ion-spinner>
+          </ion-button>
         </div>
-      </form>
-    </div>
-  </ion-card>
-  <div class="submit-button">
-    <ion-button color="primary" (click)="onSubmit()">
-      Crear Gasto
-    </ion-button>
-  </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

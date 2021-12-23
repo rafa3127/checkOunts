@@ -1,69 +1,28 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Nuevo CheckOunt</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
+<app-modal-header title="Nuevo CheckOunt"></app-modal-header>
 
 <ion-content>
-  <ion-title class="content_title">Crear un Nuevo CheckOunt</ion-title>    
-
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <ion-card>
-      <ion-title class="card_title">Datos</ion-title>    
-      <ion-item class="form_item">
-        <ion-label position="floating">Nombre</ion-label>
-        <ion-input required formControlName="name" type="text"></ion-input>
-      </ion-item>
-      <div class="form_errs" *ngIf="form.controls['name'].invalid && form.controls['name'].dirty">
-        <ion-label class="form_err" *ngIf="form.controls['name'].errors.required">El nombre es requerido para crear un CheckOunt</ion-label>
-        <ion-label class="form_err" *ngIf="form.controls['name'].errors.pattern">El nombre no puede tener caracteres especiales</ion-label>
-        <ion-label class="form_err" *ngIf="form.controls['name'].errors.maxlength"> nombre no puede tener más de 50 caracteres</ion-label>
-      </div>
-      <ion-item class="form_item">
-        <ion-label position="floating">Descripción</ion-label>
-        <ion-input formControlName="description" type="text"></ion-input>
-      </ion-item>
-      <div class="form_errs"  *ngIf="form.controls['description'].invalid && form.controls['description'].dirty">
-        <ion-label class="form_err" *ngIf="form.controls['description'].errors.pattern">La descripción no puede tener caracteres especiales</ion-label>
-        <ion-label class="form_err" *ngIf="form.controls['description'].errors.maxlength">La descripción no puede tener más de 120 caracteres</ion-label>
-      </div>
-    </ion-card>
-    <ion-title class="card_title">Participantes</ion-title> 
-    <div class="form_users" *ngFor="let u of arrayControls; let i = index">
-      <ion-card>
-        <div [formGroup]="u">
-          <ion-item class="form_item">
-            <ion-label position="floating">Nombre</ion-label>
-            <ion-input required formControlName="name" type="text"></ion-input>
-          </ion-item>
-          <div class="form_errs" *ngIf="u.controls['name'].invalid && u.controls['name'].dirty">
-            <ion-label class="form_err" *ngIf="u.controls['name'].errors.required">El nombre es requerido para Añadir al participante</ion-label>
-            <ion-label class="form_err" *ngIf="u.controls['name'].errors.pattern">El nombre no puede tener caracteres especiales</ion-label>
-          </div>
-          <ion-item class="form_item">
-            <ion-label position="floating">Email</ion-label>
-            <ion-input required formControlName="email" type="text"></ion-input>
-          </ion-item>
-          <div class="form_errs" *ngIf="u.controls['email'].invalid && u.controls['email'].dirty">
-            <ion-label class="form_err" *ngIf="u.controls['email'].errors.required">El email es requerido para añadir el participante</ion-label>
-            <ion-label class="form_err" *ngIf="u.controls['email'].errors.email">El email introducido no es válido</ion-label>
-          </div>
-        </div>
-        <ion-button (click)="removeUser(i)" expand="block" fill="clear" shape="round">
-          Eliminar <ion-icon name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-card>
-    </div>
-    <ion-button (click)="addUser()" class="add_user_button">
-      Añadir participante <ion-icon name="add"></ion-icon>
-    </ion-button>
-  </form>
-  <ion-button (click)="onSubmit()" class="create_button" block color="secondary" type="submit" [disabled]="form.invalid || formUsers.invalid">
-    Crear
-  </ion-button>
+<ion-grid fixed>
+  <ion-row *ngIf="errorMSG">
+    <ion-col size="12">
+      <app-form-alert [msg]="errorMSG"></app-form-alert>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-check-ount-data [form]="form"></app-check-ount-data>
+        <app-participants-data [arrayControls]="arrayControls" (removeUser)="removeUser($event)" (addUser)="addUser()"></app-participants-data>
+      </form>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">
+      <ion-button (click)="onSubmit()" class="create_button" block color="secondary" type="submit" [disabled]="form.invalid || formUsers.invalid || loading">
+        <span *ngIf="!loading">Crear</span>
+        <ion-spinner *ngIf="loading" name="circular"></ion-spinner>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 
 </ion-content>

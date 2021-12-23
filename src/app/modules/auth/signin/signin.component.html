@@ -2,26 +2,36 @@
   <ion-item>
     <div class="form-container">
       <ion-img src="assets/CheckOunt.png"></ion-img>
+      <app-form-alert [msg]="errorMSG"></app-form-alert>
       <div class="form">
         <form [formGroup]="form" (ngSubmit)="loginEmail()">
           <ion-item>
             <ion-label position="floating">E-Mail</ion-label>
             <ion-input required formControlName="email" type="text"></ion-input>
           </ion-item>
+          <div *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
+            <app-form-alert [classItem]="true" *ngIf="form.controls['email'].errors?.['required']" msg="Debe ingresar un email"></app-form-alert>
+            <app-form-alert [classItem]="true" *ngIf="form.controls['email'].errors?.['email']" msg="El email debe ser una dirección válida"></app-form-alert>
+          </div>
           <ion-item>
             <ion-label position="floating">Password</ion-label>
             <ion-input required formControlName="password" type="password"></ion-input>
           </ion-item>
-          <ion-button class="button email-button" type="submit" color="secondary" [disabled]="form.invalid">
-            <ion-icon name="mail-outline"></ion-icon> 
-              <span class="button-text">Iniciar Sesión con Email</span> 
+          <div *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['email'].touched)">
+            <app-form-alert [classItem]="true" *ngIf="form.controls['password'].errors?.['required']" msg="Debe ingresar una contraseña"></app-form-alert>
+          </div>
+          <ion-button class="button email-button" type="submit" color="secondary" [disabled]="form.invalid || loading">
+            <ion-icon  *ngIf="!loading"name="mail-outline"></ion-icon> 
+            <span *ngIf="!loading" class="button-text">Iniciar Sesión con Email</span> 
+            <ion-spinner *ngIf="loading" name="circular"></ion-spinner>
           </ion-button>
         </form>
       </div>
       <ion-row>
-        <ion-button class="button google-button" (click)="loginGoogle()" color="primary">
-          <ion-icon slot="start" name="logo-google" color="light"></ion-icon>
-          Iniciar Sesión con Google
+        <ion-button class="button google-button" (click)="loginGoogle()" color="primary" [disabled]="loading">
+          <ion-icon *ngIf="!loading" slot="start" name="logo-google" color="light"></ion-icon>
+          <span *ngIf="!loading"> Iniciar Sesión con Google</span> 
+          <ion-spinner *ngIf="loading" name="circular"></ion-spinner>
         </ion-button>
       </ion-row>
       <ion-row>

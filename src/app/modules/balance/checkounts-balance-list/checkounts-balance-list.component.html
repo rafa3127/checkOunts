@@ -1,0 +1,40 @@
+<app-form-alert [msg]="errorMSG"></app-form-alert>
+
+<ion-row *ngIf="loading">
+  <ion-col size="12" class="spinner-container">
+      <ion-spinner name="circular" color="medium"></ion-spinner>
+  </ion-col>
+</ion-row>
+
+<ion-row *ngIf="checkOunts.length == 0 && !loading">
+  <ion-card class="empty-array">
+    <ion-label>
+      No estas en ningún checkOunt.
+    </ion-label>
+  </ion-card>
+</ion-row>
+
+<div class="container-list" *ngIf = "!loading && checkOunts.length > 0">
+  <ion-row *ngFor="let co of checkOunts"><!--ItemCard-->
+    <ion-col class="item-card" size="12" >
+      <ion-card>
+        <ion-item class="card">
+          <ion-grid fixed>
+            <ion-row>
+              <ion-col size="7">
+                <ion-row>
+                  <ion-card-title class="card-title">{{co.payload.doc.data().name}}</ion-card-title>
+                </ion-row>
+              </ion-col>
+              <ion-col size="5" >
+                <ion-row *ngFor="let u of co.payload.doc.data().users">
+                  <ion-label class="card-amount" *ngIf = "u.email == user.email">{{u.balance | currency: "USD"}}</ion-label>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+    </ion-card>
+    </ion-col>
+  </ion-row><!--ItemCard-->
+</div>

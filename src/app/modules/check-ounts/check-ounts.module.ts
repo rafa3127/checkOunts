@@ -14,6 +14,15 @@ import { AddNewComponent } from './check-ount/expenses/add-new/add-new.component
 import { AddNewPayComponent } from './check-ount/counts/add-new/add-new.component';
 import { ExpenseComponent } from './check-ount/expenses/expense/expense.component';
 import { ChartsModule } from 'ng2-charts';
+import { SharedModule } from '../shared/shared.module';
+import { ToolbarButtonsComponent } from './check-ount/toolbar-buttons/toolbar-buttons.component';
+import { ExpensesFooterComponent } from './check-ount/expenses-footer/expenses-footer.component';
+import { CountsFooterComponent } from './check-ount/counts-footer/counts-footer.component';
+import { RouterModule } from '@angular/router';
+import {ExpenseHeaderComponent} from './check-ount/expenses/expense/expense-header/expense-header.component'
+import { ExpenseListComponent } from './check-ount/expenses/expense/expense-list/expense-list.component';
+import { BalanceChartComponent } from './check-ount/counts/balance-chart/balance-chart.component';
+import { PaysListComponent } from './check-ount/counts/pays-list/pays-list.component';
 
 @NgModule({
   imports: [
@@ -22,7 +31,9 @@ import { ChartsModule } from 'ng2-charts';
     IonicModule,
     CheckOuntsPageRoutingModule,
     ReactiveFormsModule,
-    ChartsModule
+    ChartsModule,
+    SharedModule,
+    RouterModule,
   ],
   declarations: [
     CheckOuntsPage, 
@@ -32,6 +43,13 @@ import { ChartsModule } from 'ng2-charts';
     AddNewComponent,
     AddNewPayComponent,
     ExpenseComponent,
+    ToolbarButtonsComponent,
+    ExpensesFooterComponent,
+    CountsFooterComponent,
+    ExpenseHeaderComponent,
+    ExpenseListComponent,
+    BalanceChartComponent,
+    PaysListComponent,
   ]
 })
 export class CheckOuntsPageModule {}

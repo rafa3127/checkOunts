@@ -1,61 +1,10 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-img class= "nav_logo" src="assets/nav_logo.png"></ion-img>
-    <ion-buttons slot="end">
-      <ion-menu-button color="light"></ion-menu-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
+<app-header></app-header>
 <ion-content [fullscreen]="true" color="light">
-  <ion-header collapse="condense">
-  </ion-header>
   <ion-grid fixed>
-    <ion-row>
-      <ion-col size="12">
-        <ion-title class="title" color="primary">Tus CheckOunts</ion-title>
-      </ion-col>
-    </ion-row>
-    
-    <ion-row  *ngIf="checkOunts.checkOunts.length == 0">
-      <ion-card class="empty-array">
-        <ion-label>
-          No estas en ningún checkOunt.
-        </ion-label>
-      </ion-card>
-    </ion-row>
-
-    <div class="container-cards" *ngIf="checkOunts.checkOunts.length > 0">
-    
-    <ion-row *ngFor="let co of checkOunts.checkOunts" [routerLink]="['/check-ounts/co', co.payload.doc.id]"><!--ItemCard-->
-      <ion-col class="item-card" size="12">
-        <ion-card>
-          <ion-item-sliding>
-            <ion-item class="card">
-              <ion-grid fixed>
-                <ion-row>
-                  <ion-card-title class="card-title">{{co.payload.doc.data().name}}</ion-card-title>
-                </ion-row>
-                <ion-row>
-                  <ion-card-content class="card-content">{{co.payload.doc.data().description}}</ion-card-content>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-            <ion-item-options side="end">
-              <ion-item-option color="danger">
-                <ion-icon name="trash-outline"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-card>
-      </ion-col>
-    </ion-row><!--ItemCard-->
-  </div>
+    <app-section-title title="Tus CheckOunts"></app-section-title>
+    <app-form-alert *ngIf="errorMSG" [msg]="errorMSG"></app-form-alert>
+    <app-checkounts-list [checkOunts]="checkOunts" [loading]="loading" (deletecheckOunt)="deleteCheckOunt($event)"></app-checkounts-list>
   </ion-grid>
 </ion-content>
 
-<ion-fab routerLink="/add-new" vertical="bottom" horizontal="end" slot="fixed" >
-  <ion-fab-button size="medium" color="secondary">
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
+<app-fab-button routerLink="/add-new"></app-fab-button>

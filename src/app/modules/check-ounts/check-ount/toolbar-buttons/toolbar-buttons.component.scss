@@ -1,0 +1,16 @@
+.toolbar-buttons{
+    background-color: var(--ion-color-primary);
+    ion-item{
+        justify-content: space-around;
+        ion-icon{
+            margin-right: 30px;
+        }
+    }
+}
+
+.active{
+    border-bottom: 5px var(--ion-color-secondary) solid;
+    ion-item{
+        font-weight: 700;
+    }
+}

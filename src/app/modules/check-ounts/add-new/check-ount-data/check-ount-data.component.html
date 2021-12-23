@@ -1,0 +1,21 @@
+<form [formGroup]="form" >
+  <ion-card>
+    <ion-card-title color="dark">Datos del CheckOunt</ion-card-title>    
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input required formControlName="name" type="text"></ion-input>
+    </ion-item>
+    <div *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
+      <app-form-alert [classItem]="true" *ngIf="form.controls['name'].errors?.['required']" msg="Debe ingresar un Nombre para el nuevo CheckOunt"></app-form-alert>
+      <app-form-alert [classItem]="true" *ngIf="form.controls['name'].errors?.['pattern']" msg="El Nombre no puede contener caracteres especiales"></app-form-alert>
+      <app-form-alert [classItem]="true" *ngIf="form.controls['name'].errors?.['maxlength']" msg="El Nombre no puede contener más de 50 caracteres"></app-form-alert>
+    </div>
+    <ion-item class="form_item">
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-input formControlName="description" type="text"></ion-input>
+    </ion-item>
+    <div *ngIf="form.controls['description'].invalid && (form.controls['description'].dirty || form.controls['description'].touched)">
+      <app-form-alert [classItem]="true" *ngIf="form.controls['description'].errors?.['maxlength']" msg="La descripción no puede contener más de 120 caracteres"></app-form-alert>
+    </div>
+  </ion-card>
+</form>

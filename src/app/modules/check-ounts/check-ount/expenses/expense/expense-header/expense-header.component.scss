@@ -1,0 +1,24 @@
+.amount{
+    margin: 0 auto 10px auto;
+    text-align: center;
+    max-width: 95%;
+    color: var(--ion-color-secondary);
+    font-size: 30px;
+}
+.payFor{
+    margin: 0 auto 10px auto;
+    text-align: center;
+    font-size: 14px;
+    span{
+        font-weight: 900;
+        color: var(--ion-color-medium);
+    }
+}
+
+.title{
+    margin: 20px auto;
+    text-align: center;
+    font-size: 25px;
+    max-width: 70%;    
+    color: var(--ion-color-primary);
+}

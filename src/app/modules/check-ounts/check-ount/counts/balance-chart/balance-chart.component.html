@@ -1,0 +1,23 @@
+<ion-item>
+  <ion-grid fixed>
+    <ion-row style="margin-bottom: 15px;">
+      <ion-col size="12">
+        <app-section-title title="Saldos"></app-section-title>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div class="chart">
+          <canvas baseChart 
+            [labels] = "labels"
+            [data] = "dataSets"
+            [colors] = "colors"
+            [chartType] = "type"
+            [options] = "options"
+          >
+          </canvas>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-item>

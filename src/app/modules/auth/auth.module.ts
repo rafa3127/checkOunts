@@ -6,6 +6,7 @@ import { SigninComponent } from './signin/signin.component';
 import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignupComponent } from './signup/signup.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { SignupComponent } from './signup/signup.component';
     AuthRoutingModule,
     IonicModule,
     ReactiveFormsModule,
+    SharedModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

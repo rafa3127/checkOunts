@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { AddNewPageRoutingModule } from './add-new-routing.module';
 
 import { AddNewPage } from './add-new.page';
+import { SharedModule } from '../../shared/shared.module';
+import { CheckOuntDataComponent } from './check-ount-data/check-ount-data.component';
+import { ParticipantsDataComponent } from './participants-data/participants-data.component';
 
 @NgModule({
   imports: [
@@ -14,8 +17,9 @@ import { AddNewPage } from './add-new.page';
     FormsModule,
     IonicModule,
     AddNewPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
-  declarations: [AddNewPage]
+  declarations: [AddNewPage,CheckOuntDataComponent,ParticipantsDataComponent]
 })
 export class AddNewPageModule {}

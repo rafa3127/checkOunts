@@ -1,4 +1,4 @@
-import { User } from "./users";
+import { User } from "./user";
 
 export class CheckOunt{
     name: string;

@@ -1,0 +1,32 @@
+.empty-array{
+    padding: 20px;
+    ion-label{
+        font-size: 14px;
+        text-align: justify;
+        padding: 5px;
+    }
+}
+
+.title{
+    text-align: center;
+    // margin: 0 auto;
+    margin-bottom: 5px;
+    color: var(--ion-color-secondary);
+}
+
+.table-header{
+    color: var(--ion-color-primary);
+    font-weight: 600;
+    border-bottom: solid 1px var(--ion-color-primary);
+}
+.table-item{
+    font-weight: 400;
+    font-size: 10px;
+    .amount{
+        font-size: 9px;
+        font-weight: 600;
+        color: var(--ion-color-tertiary);
+        margin: auto;
+        text-align: center;
+    }
+}

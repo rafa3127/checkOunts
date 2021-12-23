@@ -1,52 +1,58 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Nuevo Pago en {{checkOunts.selected.name}}</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="./"></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-modal-header (backButtonClicked)="headerBackButton()" [emergentModal]="true" [title]="'Nuevo Pago en ' + checkOunt.payload.data().name"></app-modal-header>
 
 
 <ion-content>
-  <ion-title class="content_title">Crear un Nuevo CheckOunt</ion-title>    
+  <ion-grid fixed>
+    <app-section-title title="Crear Pago"></app-section-title>  
+    <ion-row>
+      <ion-col size="12">
+        <app-form-alert [msg]="errorMSG"></app-form-alert>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <ion-card>   
+            <ion-item class="form_item">
+              <ion-select formControlName="userEmail" placeholder="Select One">
+                <ion-select-option disabled value="">Selecciona a la persona que pagará</ion-select-option>
+                <ion-select-option *ngFor="let user of checkOunt.payload.data().users " value="{{user.email}}">{{user.name}} ({{user.email}})</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div *ngIf="form.controls['userEmail'].invalid && (form.controls['userEmail'].dirty || form.controls['userEmail'].touched)">
+              <app-form-alert [classItem]="true" *ngIf="form.controls['userEmail'].errors?.['required']" msg="Debe ingresar seleccionar un usuario"></app-form-alert>
+            </div>
+      
+            <ion-item class="form_item">
+              <ion-select formControlName="receptorEmail" placeholder="Select One">
+                <ion-select-option disabled value="">Selecciona a la persona que recibirá el Pago</ion-select-option>
+                <ion-select-option *ngFor="let user of checkOunt.payload.data().users " value="{{user.email}}">{{user.name}} ({{user.email}})</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div *ngIf="form.controls['receptorEmail'].invalid && (form.controls['receptorEmail'].dirty || form.controls['receptorEmail'].touched)">
+              <app-form-alert [classItem]="true" *ngIf="form.controls['receptorEmail'].errors?.['required']" msg="Debe ingresar seleccionar un usuario"></app-form-alert>
+            </div>
+      
+            <ion-item class="form_item">
+              <ion-label position="floating">Monto Total</ion-label>
+              <ion-input formControlName="amount" type="number"></ion-input>
+            </ion-item>
+            <div *ngIf="form.controls['amount'].invalid && (form.controls['amount'].dirty || form.controls['amount'].touched)">
+              <app-form-alert [classItem]="true" *ngIf="form.controls['amount'].errors?.['required']" msg="Debe ingresar un monto mayor a 0"></app-form-alert>
+              <app-form-alert [classItem]="true" *ngIf="form.controls['amount'].errors?.['negativeAmount']" msg="Debe ingresar un monto mayor a 0"></app-form-alert>
+            </div>
+      
+          </ion-card>
+          <div class="submit-button">
+            <ion-button color="primary" (click)="onSubmit()" [disabled]="form.invalid || loading">
+              <span *ngIf="!loading">Crear Pago</span>
+              <ion-spinner *ngIf="loading" name="circular"></ion-spinner>
+            </ion-button>
+          </div>
+        </form>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <ion-card>   
-      <ion-item class="form_item">
-        <ion-select formControlName="userID" placeholder="Select One">
-          <ion-select-option disabled value="">Selecciona a la persona que pagará</ion-select-option>
-          <ion-select-option *ngFor="let user of checkOunts.selected.users " value="{{user.id}}">{{user.name}} ({{user.email}})</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <div class="form_errs" *ngIf="form.controls['userID'].invalid && form.controls['userID'].dirty">
-        <ion-label class="form_err" *ngIf="form.controls['userID'].errors.required">Debe seleccionar a la persona que pagará</ion-label>
-      </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-      <ion-item class="form_item">
-        <ion-select formControlName="receptorID" placeholder="Select One">
-          <ion-select-option disabled value="">Selecciona a la persona que recibirá el Pago</ion-select-option>
-          <ion-select-option *ngFor="let user of checkOunts.selected.users " value="{{user.id}}">{{user.name}} ({{user.email}})</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <div class="form_errs" *ngIf="form.controls['receptorID'].invalid && form.controls['receptorID'].dirty">
-        <ion-label class="form_err" *ngIf="form.controls['receptorID'].errors.required">Debe seleccionar a la persona que pagará</ion-label>
-      </div>
-
-      <ion-item class="form_item">
-        <ion-label position="floating">Monto Total</ion-label>
-        <ion-input formControlName="amount" type="number"></ion-input>
-      </ion-item>
-      <div class="form_errs"  *ngIf="form.controls['amount'].invalid && form.controls['amount'].dirty">
-        <ion-label class="form_err" *ngIf="form.controls['amount'].errors.required">Debe ingresar un monto mayor a 0</ion-label>
-        <ion-label class="form_err" *ngIf="form.controls['amount'].errors.negativeAmount">Debe ingresar un monto mayor a 0</ion-label>
-      </div>
-
-    </ion-card>
-    <div class="submit-button">
-      <ion-button color="primary" (click)="onSubmit()">
-        Crear Pago
-      </ion-button>
-    </div>
-  </form>
 </ion-content>

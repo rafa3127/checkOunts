@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { ModalController, NavParams } from '@ionic/angular';
 import { CheckountsService } from 'src/app/core/services/checkounts.service';
 import { ExpensesService } from 'src/app/core/services/expenses.service';
-import { UtilitiesService } from 'src/app/core/services/utilities.service';
+import { SuccessModalComponent } from 'src/app/modules/shared/success-modal/success-modal.component';
 import { customValidators } from 'src/app/validators/customValidators';
 import { ExpensesComponent } from '../expenses.component';
 
@@ -20,29 +20,31 @@ export class AddNewComponent implements OnInit {
   arrayControls: Array<any>
   total: number = 0
   changeAmounts: Array<string> = []
+  checkOunt: any = {}
+  loading: boolean = false
+  errorMSG: string | null = null
   constructor(
     private fb: FormBuilder,
-    private utilities: UtilitiesService,
-    public checkOunts: CheckountsService,
     private router: Router,
-    private auth: AuthService,
     private expenses: ExpensesService,
+    private params: NavParams,
+    private modalController: ModalController
   ) { 
     this.form = fb.group({})
     this.formUsers = fb.group({})
     this.arrayControls = []
+    this.checkOunt = this.params.get("checkOunt")
   }
-
+  
   ngOnInit() {
     this.form = this.createForm()
     this.formUsers = this.createFormUsers()
     this.arrayControls = (this.formUsers.controls.uForm as FormArray).controls
   }
 
-
   createForm():FormGroup{
     var form:any = this.fb.group({
-      userID: ['',Validators.compose([
+      userEmail: ['',Validators.compose([
         Validators.required,
       ])],
       concept: ['',Validators.compose([
@@ -61,10 +63,9 @@ export class AddNewComponent implements OnInit {
       uForm: this.fb.array([]),
     })
     var arr = form.get('uForm') as FormArray
-    var users = this.checkOunts.selected.users
+    var users = this.checkOunt.payload.data().users
     users.forEach(user => {
       var f: any = this.fb.group({
-        id: [user.id],
         name:[user.name],
         email:[user.email],
         amount: ['', Validators.compose([
@@ -77,14 +78,14 @@ export class AddNewComponent implements OnInit {
     return form
    }
    
-   calculated(id: string = ""){
-    id != "" ? this.changeAmounts.push(id) : id = "";
+   calculated(email: string = ""){
+    email != "" ? this.changeAmounts.push(email) : email = "";
      var total = this.form.controls["amount"].value
      this.total = total
      var users = this.arrayControls
      var count = users.length
      users.forEach( user => {
-       if(this.changeAmounts.includes(user.controls["id"].value)){
+       if(this.changeAmounts.includes(user.controls["email"].value)){
         total = total - user.controls["amount"].value
         count = count - 1
 
@@ -96,10 +97,11 @@ export class AddNewComponent implements OnInit {
           total = total + user.controls["amount"].value
         })
         this.total = total
+        this.changeAmounts = []
       }else{        
         var divAmount = total/(count)
         users.forEach( user => {
-          if(!(this.changeAmounts.includes(user.controls["id"].value))){
+          if(!(this.changeAmounts.includes(user.controls["email"].value))){
             user.controls["amount"].value = divAmount
             
           }
@@ -116,24 +118,50 @@ export class AddNewComponent implements OnInit {
    }
 
    onSubmit(){
+    this.loading = true 
     if(this.form.valid && this.formUsers.valid){
       var expense = this.form.value
-      expense.checkOuntID = this.checkOunts.selectedID
+      expense.checkOuntID = this.checkOunt.payload.id
       expense.payers = []
       var users = this.arrayControls
       users.forEach(user => {
-        var payer = {userID:"",userName:"",userEmail:"",amount: 0}
-        payer.userID = user.controls["id"].value
+        var payer = {userName:"",userEmail:"",amount: 0}
         payer.userName = user.controls["name"].value
         payer.userEmail = user.controls["email"].value
         payer.amount = user.controls["amount"].value
         expense.payers.push(payer)
       });
-      this.expenses.createExpense(expense)
-      this.router.navigateByUrl("/check-ounts/co/"+this.checkOunts.selectedID)
-      this.expenses.getExpensesByCheckOunt(this.checkOunts.selectedID)
+      this.expenses.createExpense(expense, this.checkOunt).then( res => {
+        this.presentModal()
+        this.modalController.dismiss({
+          "dismissed": true
+        })
+        this.loading = false
+      }).catch(err => {
+        this.errorMSG = "No se pudo crear el gasto. Intente de nuevo más tarde"
+        this.loading = false
+      })
+      this.router.navigateByUrl("/check-ounts/co/"+this.checkOunt.payload.id)
+      this.expenses.getExpensesByCheckOunt(this.checkOunt.payload.id)
+    }else{ 
+      this.errorMSG = "No se pudo crear el gasto.Revise los datos e intente de nuevo"
+      this.loading = false
     }
    }
 
+   headerBackButton(){
+    this.modalController.dismiss({
+      "dismissed": true
+    })
+   }
+
+   async presentModal() {
+    const modal = await this.modalController.create({
+      component: SuccessModalComponent, 
+      componentProps: {msg: "El Gasto se ha creado correctamente",
+                       route: `/check-ounts/co/${this.checkOunt.payload.id}`}
+    });
+    return await modal.present();
+  }
 
 }

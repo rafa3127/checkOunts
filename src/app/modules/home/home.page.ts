@@ -22,7 +22,6 @@ export class HomePage implements OnInit {
     this.expenses.getExpensesByUser()
   }
   
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }

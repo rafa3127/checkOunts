@@ -1,0 +1,16 @@
+<ion-row class="toolbar-buttons" >
+  <ion-col size="6" [ngClass]="{active: expensesSection}" (click)="select('expenses')">
+    <ion-item color="primary">
+      <ion-icon slot="start" name="cash-outline"></ion-icon>
+      Gastos
+    </ion-item>
+  </ion-col>
+  
+  <ion-col size="6" [ngClass]="{active: countsSection}" (click)="select('counts')">
+    <ion-item color="primary">
+      <ion-icon name="swap-horizontal-outline"></ion-icon>
+      Cuentas
+    </ion-item>
+  </ion-col>
+  
+</ion-row>

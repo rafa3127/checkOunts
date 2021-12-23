@@ -1,0 +1,50 @@
+<ion-row *ngIf="loading">
+  <ion-col size="12" class="spinner-container">
+      <ion-spinner name="circular" color="medium"></ion-spinner>
+  </ion-col>
+</ion-row>
+<ion-row  *ngIf="payList.length == 0 && !loading">
+  <ion-col size="12">
+    <ion-card class="empty-array">
+      <ion-label>
+        No hay ningún pago en este checkOunt.
+      </ion-label>
+    </ion-card>
+  </ion-col>
+</ion-row>
+<ion-row class="container-list" *ngIf="payList.length > 0 && !loading">
+  <ion-col size="12">
+    <ion-row *ngFor="let pay of payList" >
+      <ion-col class="item-card" size="12">
+        <ion-card>
+          <ion-item-sliding>
+            <ion-item class="card">
+              <ion-grid fixed>
+                <ion-row>
+                  <ion-col size="8">
+                    <ion-row>
+                      <ion-card-title class="card-title">{{pay.payload.doc.data().userEmail}}</ion-card-title>
+                    </ion-row>
+                    <ion-row>
+                      <ion-card-content class="card-content">a {{pay.payload.doc.data().receptorEmail}}</ion-card-content>
+                    </ion-row>
+                  </ion-col>
+                  <ion-col size="4">
+                    <ion-row>
+                      <ion-card-title class="card-amount">{{pay.payload.doc.data().amount | currency: "USD"}}</ion-card-title>
+                    </ion-row>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="delete(pay.payload.doc.id)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-col>
+</ion-row>

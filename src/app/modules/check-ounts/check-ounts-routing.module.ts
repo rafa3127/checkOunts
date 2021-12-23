@@ -15,14 +15,6 @@ const routes: Routes = [
     path: 'co/:id',
     component: CheckOuntComponent
   },
-  {
-    path: 'add-expense',
-    component: AddNewComponent
-  },
-  {
-    path: "add-pay",
-    component: AddNewPayComponent
-  }
 ];
 
 @NgModule({

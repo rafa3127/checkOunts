@@ -1,78 +1,12 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-img class= "nav_logo" src="assets/nav_logo.png"></ion-img>
-    <ion-buttons slot="end">
-      <ion-menu-button color="light"></ion-menu-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
+<app-header></app-header>
 <ion-content [fullscreen]="true" color="light">
-  
-  <div id="container">
-    <ion-img src="assets/CheckOunt.png"></ion-img>
-    <ion-title color="primary" class="hi">¡Hola {{user.displayName}}!</ion-title>
-    <ion-card>
-      <ion-card-content>
-        <div class="balance-card">
-            <ion-card-header>
-              <ion-card-title color="secondary">{{checkOunts.userTotalBalance | currency: "USD"}}</ion-card-title>
-              <ion-card-subtitle>Tu balance</ion-card-subtitle>
-            </ion-card-header>
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </div>
   <ion-grid fixed class="container">
-    <ion-row class="menu-buttons">
-      <ion-col size="6">
-        <ion-button routerLink="/check-ounts" class="home-button" expand="block" color="primary" expand="block">
-          CheckOunts
-        </ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button routerLink="/balance" class="home-button" expand="block" color="primary" expand="block">
-          Mi Balance
-        </ion-button>
-      </ion-col>
-      <!-- <ion-col size="4">
-        <ion-button class="home-button" expand="block" color="primary" expand="block">
-          Mis Gastos
-        </ion-button>
-      </ion-col> -->
-    </ion-row>
-    <ion-row>
-      <h3 class="title">
-        Últimos Gastos
-      </h3>
-    </ion-row>
-    <ion-row>
-      <ion-card class="empty-array" *ngIf="expenses.userExpenses.length == 0">
-        <ion-label>
-          Hasta el momento, no has registrado ningún gasto.
-        </ion-label>
-      </ion-card>
-    </ion-row>
-    <ion-row *ngIf="expenses.userExpenses.length > 0">
-      <ion-col size="12">
-        <ion-card>
-          <ion-grid fixed>
-            <ion-row class="table-header">
-              <ion-col size="4">CheckOunt</ion-col>
-              <ion-col size="6">Concepto</ion-col>
-              <ion-col size="2">Monto</ion-col>
-            </ion-row>
-            <ion-row class="table-item" *ngFor = "let exp of expenses.userExpenses">
-              <ion-col size="4">{{exp.coName}}</ion-col>
-              <ion-col size="5">{{exp.concept}}</ion-col>
-              <ion-col size="3" class="amount">{{exp.amount | currency: "USD"}}</ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+    <app-logo></app-logo>
+    <app-hi [name]="user.displayName"></app-hi>
+    <app-balance-card [balance] = "checkOunts.userTotalBalance"></app-balance-card>
+    <app-buttons></app-buttons>
+    <app-last-expenses [expenses]="expenses.userExpenses"></app-last-expenses>
   </ion-grid>
-
 </ion-content>
 
 

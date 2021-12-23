@@ -8,7 +8,6 @@ import { CheckountsService } from './checkounts.service';
 })
 export class ExpensesService {
   expenses: Array<any>
-  selected: any
   userExpenses: any = []
   cos: any
   user:any = JSON.parse(localStorage.getItem('user'))
@@ -19,31 +18,32 @@ export class ExpensesService {
 
   getExpenseByID(id:string){
   }
-  createExpense(expense){
-    this.afs.collection("expenses").add(expense)
-    var users = this.checkOunts.selected.users
-    users.forEach(user => {
-      expense.payers.forEach(payer => {
-        if(user.id == payer.userID){
-          user.balance = user.balance - payer.amount
-          user.expenses = user.expenses + payer.amount
-          if(user.id == expense.userID){
-            user.balance = user.balance + expense.amount
-          }
-        }
-      });
-    });
-    this.afs.collection("checkOunts").doc(this.checkOunts.selectedID).set({users: users}, {merge: true})
+
+  createExpense(expense, checkOunt){
+    return new Promise((resolve, reject) => {
+      this.afs.collection("expenses").add(expense).then( res => {
+        var users = checkOunt.payload.data().users
+        users.forEach(user => {
+          expense.payers.forEach(payer => {
+            if(user.email === payer.userEmail){
+              user.balance = user.balance - payer.amount
+              user.expenses = user.expenses + payer.amount
+              if(user.email === expense.userEmail){
+                user.balance = user.balance + expense.amount
+              }
+            }
+          });
+        });
+        this.afs.collection("checkOunts").doc(checkOunt.payload.id).set({users: users}, {merge: true})
+        .then( () => {resolve("success"); return
+        }).catch( () => {reject("error"); return})
+      }).catch( () => {reject("error"); return})
+    })
+    
   }
 
   getExpensesByCheckOunt(id:string){
-    this.expenses = []
-    this.afs.collection("expenses", ref => ref.where('checkOuntID',"==",id))
-    .snapshotChanges().subscribe( exps =>{
-      this.expenses = exps
-      console.log(exps[0].payload.doc.id)
-      console.log(exps[1].payload.doc.id)
-    })
+    return this.afs.collection("expenses", ref => ref.where('checkOuntID',"==",id)).snapshotChanges()
   }
 
   getExpensesByUser(email: string = this.user.email){
@@ -56,8 +56,8 @@ export class ExpensesService {
         var id = co.payload.doc.id
         var data = co.payload.doc.data()
         var name = data.name
-        var userID = data.users.filter(user => user.email == email)[0].id
-        cosIDs.push({id: id, name: name, userID: userID})
+        var userEmail = data.users.filter(user => user.email == email)[0].email
+        cosIDs.push({id: id, name: name, userEmail: userEmail})
       });
       var cosIDList = []
       var cosuserIDList = []
@@ -81,6 +81,37 @@ export class ExpensesService {
     this.userExpenses = expInf
     return expInf
   })
+  }
+
+  deleteExpenseById(id:string){
+    return new Promise((resolve, reject) => {
+      this.afs.collection("expenses").doc(id).get().subscribe((exp) => {
+        this.afs.collection("checkOunts").doc(exp.data()["checkOuntID"]).get().subscribe( (co) => {
+          const payer = {
+            email: exp.data()["userEmail"],
+            amount: exp.data()["amount"]
+          }
+          const payers = exp.data()["payers"]
+          const users = co.data()["users"]
+          users.forEach(u => {
+            if(payer.email === u["email"]){
+              u["balance"] -= payer.amount
+            }   
+            payers.forEach(p => {
+              if(p["userEmail"]===u["email"]){
+                u["balance"] += p["amount"]
+                u["expenses"] -= p["amount"]
+              }
+            })
+          })
+          this.afs.collection("checkOunts").doc(exp.data()["checkOuntID"]).set({users:users},{merge:true})
+          .then( () => {this.afs.collection("expenses").doc(id).delete()
+            .then(()=>{resolve("succes");return})})
+            .catch(err =>{reject("error"); return})
+          .catch(err =>{reject("error"); return})
+        }, err =>{reject("error"); return})
+      }, err =>{reject("error"); return})
+    })
   }
 
 }

@@ -1,0 +1,18 @@
+<ion-item color="light">
+  <ion-grid fixed>
+    <ion-row>
+      <p class="title">{{expense.concept}}</p>
+    </ion-row>
+    <!-- <app-section-title [title]="expense.concept"></app-section-title> -->
+    <ion-row>
+      <ion-col size="12">
+        <p class="amount">{{expense.amount | currency: "USD"}}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <p class="payFor">Pagado Por: <span>{{payFor}}</span></p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-item>

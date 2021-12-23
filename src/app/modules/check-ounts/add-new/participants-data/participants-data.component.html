@@ -1,0 +1,44 @@
+<ion-grid fixed>
+  <ion-row>
+    <ion-col size="12">
+      <ion-title color="secondary">Participantes</ion-title>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngFor="let u of arrayControls; let i = index">
+    <ion-col size="12">
+      <ion-card>
+        <div [formGroup]="u">
+          <ion-item class="form_item">
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input required formControlName="name" type="text"></ion-input>
+          </ion-item>
+          <div *ngIf="u.controls['name'].invalid && (u.controls['name'].dirty || u.controls['name'].touched)">
+            <app-form-alert [classItem]="true" *ngIf="u.controls['name'].errors?.['required']" msg="Debe ingresar un Nombre para el participante"></app-form-alert>
+            <app-form-alert [classItem]="true" *ngIf="u.controls['name'].errors?.['pattern']" msg="El Nombre no puede contener caracteres especiales ni números"></app-form-alert>
+          </div>
+          <ion-item class="form_item">
+            <ion-label position="floating">Email</ion-label>
+            <ion-input required formControlName="email" type="text"></ion-input>
+          </ion-item>
+          <div *ngIf="u.controls['email'].invalid && (u.controls['email'].dirty || u.controls['email'].touched)">
+            <app-form-alert [classItem]="true" *ngIf="u.controls['email'].errors?.['required']" msg="Debe ingresar un email"></app-form-alert>
+            <app-form-alert [classItem]="true" *ngIf="u.controls['email'].errors?.['email']" msg="El email debe ser una dirección válida"></app-form-alert>
+          </div>
+        </div>
+        <ion-button (click)="remove(i)" expand="block" fill="clear" shape="round">
+          Eliminar <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">
+      <ion-button (click)="add()">
+        Añadir participante <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<div class="form_users" >
+  
+</div>

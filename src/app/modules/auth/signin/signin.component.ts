@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -10,10 +10,13 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class SigninComponent implements OnInit {
   form: FormGroup
+  errorMSG: string | null = null
+  loading: boolean = false
   constructor(
     private auth: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) { 
     this.form = fb.group({})
   }
@@ -40,16 +43,40 @@ export class SigninComponent implements OnInit {
 
 
   loginGoogle(){
-    this.auth.GoogleAuth()
+    this.loading = true
+    this.auth.googleSignIn().then( (result) => {
+      this.ngZone.run(
+        () => { this.router.navigate(["home"])}
+      )
+      this.auth.SetUserData(result)
+      this.loading = false
+    }).catch( ({code}) => {
+      this.errorMSG = this.auth.errors[code] ? this.auth.errors[code] : "Hubo un error inesperado. Intentelo de nuevo más tarde"
+      this.loading = false
+    })
   }
 
   loginEmail() {
+    this.loading = true
     if (this.form.valid) {
-      this.auth.SignIn(
-        this.form.value.email,
-        this.form.value.password
-      );
+      this.auth.SignIn(this.form.value.email, this.form.value.password).then( (result) => {
+        this.ngZone.run( () => {
+          this.router.navigate(["home"])
+          this.auth.SetUserData(result.user, this.form.value.name)
+          this.loading = false
+        })
+      }).catch(({code}) => {
+        this.errorMSG = this.auth.errors[code] ? this.auth.errors[code] : "Hubo un error inesperado. Intentelo de nuevo más tarde"
+        this.loading = false
+      })
+      }else{
+        this.errorMSG = "Los datos enviados no son válidos. Revisa el formulario"
+        this.loading = false
     }
   }
+
+
+
+  
 }
 

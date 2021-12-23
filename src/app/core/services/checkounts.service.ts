@@ -21,53 +21,50 @@ export class CheckountsService {
   ) { 
     this.checkOunts = []
     this.checkOuntBalance = 0
-    // this.readCheckOunts()
   }
 
   getCheckOuntByID(id: string){
-    this.selected = this.afs.collection("checkOunts").doc(id)
-    .snapshotChanges().subscribe( cos =>{
-      this.selected = cos.payload.data()
-      this.selectedID = cos.payload.id
-      var totalExpenses = 0 
-      this.selected.users.forEach(user =>{
-        if(user.email == this.user.email){
-          this.checkOuntUserID = user.id
-          this.checkOuntBalance = user.balance
-          this.checkOuntExpenses = user.expenses
-        }
-        totalExpenses += user.expenses
-      })
-      this.checkOuntTotalExpenses = totalExpenses
-    })
+    return this.afs.collection("checkOunts").doc(id)
+    .snapshotChanges()
   }
 
 
   createCheckOunt(co: CheckOunt){
-    return new Promise<any>((resolve,reject) =>
-    {
-      this.afs.collection("checkOunts").add(co)
-      .then(res => {
-      }, err => reject(err))
-    }
-    )
+    return this.afs.collection("checkOunts").add(co)
   }
 
-  readCheckOunts(email: string = this.user.email){
-    this.checkOunts = []
-    this.afs.collection("checkOunts", ref => ref.where('usersMails',"array-contains", email))
-    .snapshotChanges().subscribe( cos =>{
-      this.checkOunts = cos
-      var totalBalance = 0
-      this.checkOunts.forEach(co =>{
-        var balance = co.payload.doc.data().users.filter(user => user.email == email)[0]["balance"]
-        totalBalance = totalBalance + balance
-      })
-      this.userTotalBalance = totalBalance
+  getCheckOunts(email: string = this.user.email){
+    return this.afs.collection("checkOunts", ref => ref.where('usersMails',"array-contains", email))
+    .snapshotChanges()
+  }
+
+  deleteCheckOunt(id: string){
+    return new Promise((resolve, reject) => {
+      this.afs.collection("checkOunts").doc(id).snapshotChanges().subscribe(co => {
+        let users = co.payload.data()["users"]
+        if(users.filter(u => u.email == this.user.email)[0]["balance"] != 0){
+          reject("balanceError")
+          return
+        }
+        users = users.filter(u => u.email != this.user.email)
+        if(users.length == 0){
+          this.afs.collection("checkOunts").doc(id).delete()
+          .then( () => {resolve("deleted"); return})
+          .catch( () => {reject("error"); return})
+        }else{
+          try{
+            const userEmails = co.payload.data()["usersMails"].filter(u => u != this.user.email)
+            this.afs.collection("checkOunts").doc(id).set({users: users, usersMails: userEmails}, {merge : true})
+            .then( () =>{ resolve("user deleted from checkOunt"); return})
+            .catch( () => {reject("error");return})
+          }catch{
+            () => {reject("error"); return}
+          }
+        }
+      }, err => {reject("error"); return})
     })
-    return this.checkOunts
+     
   }
-
 
   
 }

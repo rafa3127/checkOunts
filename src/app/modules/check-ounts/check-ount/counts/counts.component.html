@@ -1,61 +1,8 @@
 <ion-content>
-  <ion-item>
-    <ion-grid fixed>
-      <ion-row>
-        <ion-col size="12">
-          <div class="chart">
-            <ion-title color="primary">Saldos</ion-title>
-            <canvas baseChart 
-              [labels] = "labels"
-              [data] = "dataSets"
-              [colors] = "colors"
-              [chartType] = "type"
-              [options] = "options"
-            >
-            </canvas>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-item>
+  <app-balance-chart [dataSets]="dataSets" [colors]="colors" [labels]="labels"></app-balance-chart>
   <ion-grid>
-    <ion-row>
-      <ion-col size="12">
-        <ion-title color="primary">Pagos</ion-title>
-      </ion-col>
-    </ion-row>
+    <app-section-title title="Pagos"></app-section-title>
+    <app-pays-list [payList]="payList" (deletePay)="delete($event)" [loading]="loading"></app-pays-list>
 
-    <ion-row *ngFor="let pay of payList"><!--ItemCard-->
-      <ion-col class="item-card" size="12">
-        <ion-card>
-          <ion-item-sliding>
-            <ion-item class="card">
-              <ion-grid fixed>
-                <ion-row>
-                  <ion-col size="9">
-                    <ion-row>
-                      <ion-card-title class="card-title">Pago de {{pay.payer}} ({{pay.payerEmail}})</ion-card-title>
-                    </ion-row>
-                    <ion-row>
-                      <ion-card-content class="card-content">a {{pay.receptor}} ({{pay.receptorEmail}})</ion-card-content>
-                    </ion-row>
-                  </ion-col>
-                  <ion-col size="3">
-                    <ion-row>
-                      <ion-card-title class="card-amount">{{pay.amount | currency: checkOunts.selected.currency}}</ion-card-title>
-                    </ion-row>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-            <ion-item-options side="end">
-              <ion-item-option color="danger">
-                <ion-icon name="trash-outline"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-card>
-      </ion-col>
-    </ion-row><!--ItemCard-->
   </ion-grid>
 </ion-content>

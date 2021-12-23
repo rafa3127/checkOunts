@@ -1,11 +1,3 @@
-.nav_logo{
-    max-width: 50%;
-}
-
-ion-toolbar{
-    background-color: var(--ion-color-primary);;
-}
-
 ion-title{
     margin-top: 70px;
     font-size: 20px;
@@ -22,48 +14,3 @@ ion-card{
     color: var(--ion-color-secondary);
 }
 
-.table-header{
-    color: var(--ion-color-primary);
-    font-weight: 600;
-    border-bottom: solid 1px var(--ion-color-primary);
-}
-.table-item{
-    font-weight: 400;
-    font-size: 14px;
-    .amount{
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--ion-color-tertiary);
-        margin: auto;
-        text-align: center;
-    }
-}
-
-.menu-buttons{
-    width: 95%;
-    margin: auto;
-    margin-bottom: 15px;
-    ion-button{
-        color: #ffff;
-        font-weight: 600;
-        font-size: 15px;
-    }
-}
-
-.hi{
-    margin-top: 5px;
-    text-align: center;
-}
-
-.home-button{
-    text-transform: none;
-}
-.empty-array{
-    width: 100%;
-    padding: 20px;
-    ion-label{
-        font-size: 14px;
-        text-align: justify;
-        padding: 5px;
-    }
-}
