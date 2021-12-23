@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1018555373637",
+    "project_id": "checkount-bad9e",
+    "storage_bucket": "checkount-bad9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018555373637:android:cb80ac4bb045581f4f6b2c",
+        "android_client_info": {
+          "package_name": "com.radale.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018555373637-ij0e1n0capagd75pg060f7dr004id31a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7kRllHsLUOYw6nQIHfuGBpiy0R2L_NM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018555373637-ij0e1n0capagd75pg060f7dr004id31a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
