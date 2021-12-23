@@ -67,13 +67,10 @@ export class CheckOuntComponent implements OnInit {
             this.userTotalExpenses = user["expenses"]
             this.userBalance = user["balance"]
           }
-          console.log(1)
           this.expensesService.getExpensesByCheckOunt(this.params).subscribe( res => {
             this.expensesList = res
-            console.log(2)
             this.paysService.getPaysByCheckOunt(this.params).subscribe( (res) =>{
               this.payList = res
-              console.log(3)
               resolve("succes")
             },err => {
               reject("error")
