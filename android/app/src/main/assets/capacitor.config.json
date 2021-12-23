@@ -1,0 +1,6 @@
+{
+	"appId": "com.radaledev.checkount",
+	"appName": "CheckOunt",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CheckOunt</string>
+    <string name="title_activity_main">CheckOunt</string>
+    <string name="package_name">com.radaledev.checkount</string>
+    <string name="custom_url_scheme">com.radaledev.checkount</string>
+</resources>
